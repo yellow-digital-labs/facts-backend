@@ -25,3 +25,14 @@ Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->na
 // authentication
 Route::get('/auth/login-basic', $controller_path . '\authentications\LoginBasic@index')->name('auth-login-basic');
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name('auth-register-basic');
+
+
+/* Auto-generated admin routes */
+Route::get('/m-foods-categories/list', [App\Http\Controllers\Admin\MFoodsCategoriesController::class,
+'list'])->name('m-foods-categories-list');
+Route::resource('/m-foods-categories', App\Http\Controllers\Admin\MFoodsCategoriesController::class);
+
+/* Auto-generated admin routes */
+Route::get('/m-event-categories/list', [App\Http\Controllers\Admin\MEventCategoriesController::class,
+'list'])->name('m-event-categories-list');
+Route::resource('/m-event-categories', App\Http\Controllers\Admin\MEventCategoriesController::class);

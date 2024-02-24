@@ -1,4 +1,11 @@
 <?php return array (
+  'dedoc/scramble' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Dedoc\\Scramble\\ScrambleServiceProvider',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 
@@ -50,6 +57,13 @@
     'aliases' => 
     array (
       'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
+    ),
+  ),
+  'yellow-digital-labs/html-laravel-vuexy-crud-generator' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'YellowDigitalLabs\\HtmlLaravelVuexyCrudGenerator\\AdminGeneratorServiceProvider',
     ),
   ),
 );
