@@ -9,29 +9,44 @@
     {
       "url": "page-2",
       "icon": "menu-icon tf-icons ti ti-file",
-      "name": "Page 2",
-      "slug": "pages-page-2"
+      "name": "Users",
+      "slug": "setting"
     },
     {
-      "url": "pages/misc-error",
-      "name": "Error",
-      "icon": "menu-icon tf-icons ti ti-alert-triangle",
-      "slug": "pages-misc-error",
-      "target": "_blank"
+      "url": "page-2",
+      "icon": "menu-icon tf-icons ti ti-file",
+      "name": "Requests",
+      "slug": "setting"
     },
     {
-      "url": "auth/login-basic",
-      "name": "Login",
-      "icon": "menu-icon tf-icons ti ti-login",
-      "slug": "auth-login-basic",
-      "target": "_blank"
+      "url": "page-2",
+      "icon": "menu-icon tf-icons ti ti-file",
+      "name": "Food",
+      "slug": "setting"
     },
     {
-      "url": "auth/register-basic",
-      "name": "Register",
-      "icon": "menu-icon tf-icons ti ti-user",
-      "slug": "auth-register-basic",
-      "target": "_blank"
+      "url": "page-2",
+      "icon": "menu-icon tf-icons ti ti-file",
+      "name": "Accommodation",
+      "slug": "setting"
+    },
+    {
+      "url": "page-2",
+      "icon": "menu-icon tf-icons ti ti-file",
+      "name": "Cabs",
+      "slug": "setting"
+    },
+    {
+      "url": "page-2",
+      "icon": "menu-icon tf-icons ti ti-file",
+      "name": "Tickets",
+      "slug": "setting"
+    },
+    {
+      "url": "page-2",
+      "icon": "menu-icon tf-icons ti ti-file",
+      "name": "Shops",
+      "slug": "setting"
     }
   ]
 }
