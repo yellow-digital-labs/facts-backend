@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('contact', 15)->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('contact_verified_at')->nullable();
             $table->string('password');
+            $table->enum('food_status', ['not applied','pending','approved','rejected'])->default('not applied');
+            $table->enum('accommodation_status', ['not applied','pending','approved','rejected'])->default('not applied');
+            $table->enum('cabs_status', ['not applied','pending','approved','rejected'])->default('not applied');
+            $table->enum('tickets_status', ['not applied','pending','approved','rejected'])->default('not applied');
+            $table->enum('shop_status', ['not applied','pending','approved','rejected'])->default('not applied');
             $table->rememberToken();
             $table->timestamps();
         });
