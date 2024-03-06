@@ -70,6 +70,15 @@
       "php-http/discovery": true
     }
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "./packages/yellow-digital-labs/html-laravel-vuexy-crud-generator",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "minimum-stability": "dev",
   "prefer-stable": true
 }
