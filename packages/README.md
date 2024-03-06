@@ -1,0 +1,1 @@
+# html-laravel-vuexy-crud-generator
