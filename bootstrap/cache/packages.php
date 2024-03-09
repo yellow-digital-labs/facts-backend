@@ -6,6 +6,13 @@
       0 => 'Dedoc\\Scramble\\ScrambleServiceProvider',
     ),
   ),
+  'laravel/fortify' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Fortify\\FortifyServiceProvider',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 

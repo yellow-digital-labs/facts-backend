@@ -27,4 +27,8 @@ class MEventCategory extends Model
     {
         return url('/admin/m-event-categories/'.$this->getKey());
     }
+
+    public function Event () : HasMany {
+        return $this->hasMany(Event::class);
+    }
 }

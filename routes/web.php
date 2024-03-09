@@ -36,3 +36,13 @@ Route::resource('/m-foods-categories', App\Http\Controllers\Admin\MFoodsCategori
 Route::get('/m-event-categories/list', [App\Http\Controllers\Admin\MEventCategoriesController::class,
 'list'])->name('m-event-categories-list');
 Route::resource('/m-event-categories', App\Http\Controllers\Admin\MEventCategoriesController::class);
+
+/* Auto-generated admin routes */
+Route::get('/events/list', [App\Http\Controllers\Admin\EventsController::class,
+'list'])->name('events-list');
+Route::resource('/events', App\Http\Controllers\Admin\EventsController::class);
+
+/* Auto-generated admin routes */
+Route::get('/events-orders/list', [App\Http\Controllers\Admin\EventsOrdersController::class,
+'list'])->name('events-orders-list');
+Route::resource('/events-orders', App\Http\Controllers\Admin\EventsOrdersController::class);
