@@ -232,9 +232,22 @@ class EventsController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        //
+        $data = Event::where(["id" => $id])->first();
+        if($request->route()->getPrefix() === 'api'){
+            if($data){
+                return response()->json([
+                    "code" => 200,
+                    "data" => $data,
+                ]);
+            } else {
+                return response()->json([
+                    "code" => 501,
+                    "data" => "No data found",
+                ]);
+            }
+        }
     }
 
     public function edit(Event $event)
