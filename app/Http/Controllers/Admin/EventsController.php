@@ -22,34 +22,42 @@ class EventsController extends Controller
     }
 
     public function activeList(Request $request){
-        $lists = Event::where(['active' => true])
-            ->orderBy('event_start_datetime', 'asc')
-            ->get();
-        $data = [];
-        if (!empty($lists)) {
-            foreach ($lists as $list) {
-                $nestedData["id"] = $list->id;
-                $nestedData["event_categories_id"] = $list->event_categories_id;
-                $nestedData["event_name"] = $list->event_name;
-                $nestedData["event_start_datetime"] = $list->event_start_datetime;
-                $nestedData["event_end_datetime"] = $list->event_end_datetime;
-                $nestedData["event_description"] = $list->event_description;
-                $nestedData["event_primary_image"] = $list->event_primary_image;
-                $nestedData["event_location"] = $list->event_location;
-                $nestedData["event_contact"] = $list->event_contact;
-                $nestedData["event_available_tickets"] = $list->event_available_tickets;
-                $nestedData["event_ticket_amount"] = $list->event_ticket_amount;
-                $nestedData["event_ticket_discount_amount"] = $list->event_ticket_discount_amount;
-                $data[] = $nestedData;
+        try{
+            $lists = Event::where(['active' => true])
+                ->orderBy('event_start_datetime', 'asc')
+                ->get();
+            $data = [];
+            if (!empty($lists)) {
+                foreach ($lists as $list) {
+                    $nestedData["id"] = $list->id;
+                    $nestedData["event_categories_id"] = $list->event_categories_id;
+                    $nestedData["event_name"] = $list->event_name;
+                    $nestedData["event_start_datetime"] = $list->event_start_datetime;
+                    $nestedData["event_end_datetime"] = $list->event_end_datetime;
+                    $nestedData["event_description"] = $list->event_description;
+                    $nestedData["event_primary_image"] = $list->event_primary_image;
+                    $nestedData["event_location"] = $list->event_location;
+                    $nestedData["event_contact"] = $list->event_contact;
+                    $nestedData["event_available_tickets"] = $list->event_available_tickets;
+                    $nestedData["event_ticket_amount"] = $list->event_ticket_amount;
+                    $nestedData["event_ticket_discount_amount"] = $list->event_ticket_discount_amount;
+                    $data[] = $nestedData;
+                }
             }
-        }
 
-        if ($data) {
-            return response()->json([
-                "code" => 200,
-                "data" => $data,
-            ]);
-        } else {
+            if ($data) {
+                return response()->json([
+                    "code" => 200,
+                    "data" => $data,
+                ]);
+            } else {
+                return response()->json([
+                    "message" => "No data found",
+                    "code" => 501,
+                    "data" => [],
+                ]);
+            }
+        } catch(Exception $e){
             return response()->json([
                 "message" => "Internal Server Error",
                 "code" => 500,
@@ -187,17 +195,41 @@ class EventsController extends Controller
     public function store(Request $request)
     {
         // Sanitize input
+        $eventData = $request->validate([
+            'event_categories_id'=>'required|numeric',
+            'event_name'=>'required|string',
+            'event_start_datetime'=>'required|date',
+            'event_end_datetime'=>'required|date',
+            'event_end_datetime'=>'required|date',
+            'event_description'=>'required|string',
+            // 'event_primary_image'=>'required|file',
+            'event_location'=>'required|string|max:255',
+            'event_contact'=>'required|numeric|max_digits:15',
+            'event_available_tickets'=>'required|numeric',
+            'event_ticket_amount'=>'required|numeric',
+            'event_ticket_discount_amount'=>'required|numeric',
+            'active'=>'required|boolean',
+        ]);
+        
         $sanitized = $request->all();
         // $user_id = Auth::user()->id;
         $sanitized['active'] = isset($sanitized['active']) ? $sanitized['active'] : 0;
+        $sanitized['user_id'] = 1;
+        $sanitized['event_primary_image'] = 'https://placehold.co/400';
 
         // Store the Event
         $event = Event::updateOrCreate([
             "id" => isset($sanitized['id']) ? $sanitized['id'] : null,
         ],$sanitized);
 
-
-        return redirect()->route("events.index");
+        if($request->route()->getPrefix() === 'api'){
+            return response()->json([
+                "code" => 200,
+                "message" => "Successfully added record",
+            ]);
+        } else {
+            return redirect()->route("events.index");
+        }
     }
 
     public function show($id)

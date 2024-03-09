@@ -34,4 +34,12 @@ Route::get('/events/category/list', [App\Http\Controllers\Admin\MEventCategories
 'activeList']);
 //Events
 Route::get('/events/list', [App\Http\Controllers\Admin\EventsController::class,
-'activeList']);
+'activeList'])->name('events-list'); //Events list
+Route::post('/event/create', [App\Http\Controllers\Admin\EventsController::class,
+'store'])->name('event-create'); //Create event
+Route::post('/event/{id}', [App\Http\Controllers\Admin\EventsController::class,
+'show'])->name('event-details'); //Get event details
+Route::post('/event/{id}/delete', [App\Http\Controllers\Admin\EventsController::class,
+'destroy'])->name('event-destroy'); //destroy event
+Route::post('/event/{id}/edit', [App\Http\Controllers\Admin\EventsController::class,
+'store'])->name('event-update'); //update event
