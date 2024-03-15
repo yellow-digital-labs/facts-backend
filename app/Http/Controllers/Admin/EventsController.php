@@ -21,7 +21,62 @@ class EventsController extends Controller
         ]);
     }
 
+    /**
+     * Active Event List.
+     * 
+     * Get all active events list.
+     */
     public function activeList(Request $request){
+        try{
+            $lists = Event::where(['active' => true])
+                ->orderBy('event_start_datetime', 'asc')
+                ->get();
+            $data = [];
+            if (!empty($lists)) {
+                foreach ($lists as $list) {
+                    $nestedData["id"] = $list->id;
+                    $nestedData["event_categories_id"] = $list->event_categories_id;
+                    $nestedData["event_name"] = $list->event_name;
+                    $nestedData["event_start_datetime"] = $list->event_start_datetime;
+                    $nestedData["event_end_datetime"] = $list->event_end_datetime;
+                    $nestedData["event_description"] = $list->event_description;
+                    $nestedData["event_primary_image"] = $list->event_primary_image;
+                    $nestedData["event_location"] = $list->event_location;
+                    $nestedData["event_contact"] = $list->event_contact;
+                    $nestedData["event_available_tickets"] = $list->event_available_tickets;
+                    $nestedData["event_ticket_amount"] = $list->event_ticket_amount;
+                    $nestedData["event_ticket_discount_amount"] = $list->event_ticket_discount_amount;
+                    $data[] = $nestedData;
+                }
+            }
+
+            if ($data) {
+                return response()->json([
+                    "code" => 200,
+                    "data" => $data,
+                ]);
+            } else {
+                return response()->json([
+                    "message" => "No data found",
+                    "code" => 501,
+                    "data" => [],
+                ]);
+            }
+        } catch(Exception $e){
+            return response()->json([
+                "message" => "Internal Server Error",
+                "code" => 500,
+                "data" => [],
+            ]);
+        }
+    }
+
+    /**
+     * Admin Event List.
+     * 
+     * Get all events created by logged in user. To fetch thing user login is required. So, you will need to pass `Barer token` in header.
+     */
+    public function adminList(Request $request){
         try{
             $lists = Event::where(['active' => true])
                 ->orderBy('event_start_datetime', 'asc')

@@ -35,11 +35,13 @@ Route::get('/events/category/list', [App\Http\Controllers\Admin\MEventCategories
 //Events
 Route::get('/events/list', [App\Http\Controllers\Admin\EventsController::class,
 'activeList'])->name('events-list'); //Events list
+Route::get('/events/admin/list', [App\Http\Controllers\Admin\EventsController::class,
+'adminList'])->name('events-admin-list')->middleware('auth:sanctum'); //Admin Events list
 Route::post('/event/create', [App\Http\Controllers\Admin\EventsController::class,
-'store'])->name('event-create'); //Create event
+'store'])->name('event-create')->middleware('auth:sanctum'); //Create event
 Route::post('/event/{id}', [App\Http\Controllers\Admin\EventsController::class,
 'show'])->name('event-details'); //Get event details
 Route::post('/event/{id}/delete', [App\Http\Controllers\Admin\EventsController::class,
-'destroy'])->name('event-destroy'); //destroy event
+'destroy'])->name('event-destroy')->middleware('auth:sanctum'); //destroy event
 Route::post('/event/{id}/edit', [App\Http\Controllers\Admin\EventsController::class,
-'store'])->name('event-update'); //update event
+'store'])->name('event-update')->middleware('auth:sanctum'); //update event
