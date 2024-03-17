@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Admin\EventsOrder;
+namespace App\Http\Requests\Admin\MEventsOrdersStatus;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class StoreEventsOrder extends FormRequest
+class StoreMEventsOrdersStatus extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class StoreEventsOrder extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('admin.events-order.create');
+        return Gate::allows('admin.m-events-orders-status.create');
     }
 
     /**
@@ -26,16 +26,8 @@ class StoreEventsOrder extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_user_id' => ['required', 'string'],
-            'event_user_id' => ['required', 'string'],
-            'event_id' => ['required', 'string'],
-            'no_of_booking' => ['required', 'integer'],
-            'booking_unit_amount' => ['required', 'numeric'],
-            'applicable_tax_amount' => ['required', 'numeric'],
-            'booking_total_amount' => ['required', 'numeric'],
-            'points_used' => ['required', 'integer'],
-            'booking_payable_amount' => ['required', 'numeric'],
-            'status' => ['required', 'string'],
+            'events_orders_status_name' => ['required', Rule::unique('m_events_orders_status', 'events_orders_status_name'), 'string'],
+            'active' => ['required', 'boolean'],
             
         ];
     }

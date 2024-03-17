@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\EventsOrder;
+namespace App\Http\Requests\Admin\MUserType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class IndexEventsOrder extends FormRequest
+class IndexMUserType extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class IndexEventsOrder extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('admin.events-order.index');
+        return Gate::allows('admin.m-user-type.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class IndexEventsOrder extends FormRequest
     public function rules(): array
     {
         return [
-            'orderBy' => 'in:id,booking_user_id,event_user_id,event_id,no_of_booking,booking_unit_amount,applicable_tax_amount,booking_total_amount,points_used,booking_payable_amount,status|nullable',
+            'orderBy' => 'in:id,name,active|nullable',
             'orderDirection' => 'in:asc,desc|nullable',
             'search' => 'string|nullable',
             'page' => 'integer|nullable',

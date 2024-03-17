@@ -45,3 +45,5 @@ Route::post('/event/{id}/delete', [App\Http\Controllers\Admin\EventsController::
 'destroy'])->name('event-destroy')->middleware('auth:sanctum'); //destroy event
 Route::post('/event/{id}/edit', [App\Http\Controllers\Admin\EventsController::class,
 'store'])->name('event-update')->middleware('auth:sanctum'); //update event
+Route::post('/event/booking/create', [App\Http\Controllers\Admin\EventsOrdersController::class,
+'store'])->name('event-booking-add')->middleware('auth:sanctum'); //add event booking

@@ -4,7 +4,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', trans('admin.events-order.actions.index'))
+@section('title', trans('admin.m-user-type.actions.index'))
 
 @section('vendor-style')
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css')}}">
@@ -21,10 +21,10 @@ $configData = Helper::appClasses();
 
 @section('page-script')
 <script>
-  var viewListUrl = '/events_orders/list';
-  var urlCreateView = 'events-orders/create';
+  var viewListUrl = '/m_user_types/list';
+  var urlCreateView = 'm-user-types/create';
 </script>
-<script src="{{asset('js/admin/events-order/Listing.js')}}"></script>
+<script src="{{asset('js/admin/m-user-type/Listing.js')}}"></script>
 @endsection
 
 @section('content')
@@ -37,17 +37,9 @@ $configData = Helper::appClasses();
       <thead class="border-top">
         <tr>
           <th></th>
-                    <th>{{ trans('admin.events-order.columns.id') }}</th>
-                    <th>{{ trans('admin.events-order.columns.booking_user_id') }}</th>
-                    <th>{{ trans('admin.events-order.columns.event_user_id') }}</th>
-                    <th>{{ trans('admin.events-order.columns.event_id') }}</th>
-                    <th>{{ trans('admin.events-order.columns.no_of_booking') }}</th>
-                    <th>{{ trans('admin.events-order.columns.booking_unit_amount') }}</th>
-                    <th>{{ trans('admin.events-order.columns.applicable_tax_amount') }}</th>
-                    <th>{{ trans('admin.events-order.columns.booking_total_amount') }}</th>
-                    <th>{{ trans('admin.events-order.columns.points_used') }}</th>
-                    <th>{{ trans('admin.events-order.columns.booking_payable_amount') }}</th>
-                    <th>{{ trans('admin.events-order.columns.status') }}</th>
+                    <th>{{ trans('admin.m-user-type.columns.id') }}</th>
+                    <th>{{ trans('admin.m-user-type.columns.name') }}</th>
+                    <th>{{ trans('admin.m-user-type.columns.active') }}</th>
                   </tr>
       </thead>
     </table>
@@ -66,7 +58,7 @@ $configData = Helper::appClasses();
       @csrf
       <input type="hidden" name="id" id="edit-id">
 
-      @include('admin.events-order.components.form-elements')
+      @include('admin.m-user-type.components.form-elements')
 
       <div class="col-sm-12 mt-5">
         <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>

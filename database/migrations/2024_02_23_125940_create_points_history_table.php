@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('points_history', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id');
+            $table->string('order_type', 25);
+            $table->integer('points_received')->default(0);
+            $table->integer('points_spent')->default(0);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->index('user_id');
+            $table->index('order_id');
+            $table->index('order_type');
         });
     }
 

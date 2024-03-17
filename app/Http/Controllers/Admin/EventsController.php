@@ -79,6 +79,7 @@ class EventsController extends Controller
     public function adminList(Request $request){
         try{
             $lists = Event::where(['active' => true])
+                ->where(['user_id' => $request->user()->id])
                 ->orderBy('event_start_datetime', 'asc')
                 ->get();
             $data = [];
@@ -182,9 +183,7 @@ class EventsController extends Controller
                         ->orWhere("event_available_tickets", "LIKE", "%{$search}%")
                         ->orWhere("event_ticket_amount", "LIKE", "%{$search}%")
                         ->orWhere("event_ticket_discount_amount", "LIKE", "%{$search}%")
-                        ->orWhere("active", "LIKE", "%{$search}%")
-  ;
-;
+                        ->orWhere("active", "LIKE", "%{$search}%");
                 });
 
             $totalFiltered = $q->count();
@@ -269,7 +268,7 @@ class EventsController extends Controller
         $sanitized = $request->all();
         // $user_id = Auth::user()->id;
         $sanitized['active'] = isset($sanitized['active']) ? $sanitized['active'] : 0;
-        $sanitized['user_id'] = 1;
+        $sanitized['user_id'] = $request->user()->id;
         $sanitized['event_primary_image'] = 'https://placehold.co/400';
 
         // Store the Event
@@ -325,7 +324,9 @@ class EventsController extends Controller
     public function destroy(Request $request, $id)
     {
 
-        $data = Event::where(["id" => $id])->delete();
+        $data = Event::where(["id" => $id])
+            ->where(['user_id' => $request->user()->id])
+            ->delete();
 
         if ($request->ajax()) {
             return response()->json([

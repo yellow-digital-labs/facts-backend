@@ -53,3 +53,44 @@ $factory->define(App\Models\EventsOrder::class, static function (Faker\Generator
         
     ];
 });
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\EventsOrder::class, static function (Faker\Generator $faker) {
+    return [
+        'booking_user_id' => $faker->sentence,
+        'event_user_id' => $faker->sentence,
+        'event_id' => $faker->sentence,
+        'no_of_booking' => $faker->randomNumber(5),
+        'booking_unit_amount' => $faker->randomFloat,
+        'applicable_tax_amount' => $faker->randomFloat,
+        'booking_total_amount' => $faker->randomFloat,
+        'points_used' => $faker->randomNumber(5),
+        'booking_payable_amount' => $faker->randomFloat,
+        'status' => $faker->sentence,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\MUserType::class, static function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->firstName,
+        'active' => $faker->boolean(),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\MEventsOrdersStatus::class, static function (Faker\Generator $faker) {
+    return [
+        'events_orders_status_name' => $faker->sentence,
+        'active' => $faker->boolean(),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});

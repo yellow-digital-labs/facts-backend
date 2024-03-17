@@ -26,6 +26,16 @@ class UpdateEventsOrder extends FormRequest
     public function rules(): array
     {
         return [
+            'booking_user_id' => ['sometimes', 'string'],
+            'event_user_id' => ['sometimes', 'string'],
+            'event_id' => ['sometimes', 'string'],
+            'no_of_booking' => ['sometimes', 'integer'],
+            'booking_unit_amount' => ['sometimes', 'numeric'],
+            'applicable_tax_amount' => ['sometimes', 'numeric'],
+            'booking_total_amount' => ['sometimes', 'numeric'],
+            'points_used' => ['sometimes', 'integer'],
+            'booking_payable_amount' => ['sometimes', 'numeric'],
+            'status' => ['sometimes', 'string'],
             
         ];
     }

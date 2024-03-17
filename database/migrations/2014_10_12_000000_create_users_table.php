@@ -25,6 +25,7 @@ return new class extends Migration
             $table->enum('tickets_status', ['not applied','pending','approved','rejected'])->default('not applied');
             $table->enum('shop_status', ['not applied','pending','approved','rejected'])->default('not applied');
             $table->rememberToken();
+            $table->integer('available_points')->default(0);
             $table->timestamps();
         });
     }

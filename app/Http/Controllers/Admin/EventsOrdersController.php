@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\EventsOrder;
+use App\Models\Event;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Auth;
@@ -23,6 +25,16 @@ class EventsOrdersController extends Controller
 
     public function list(Request $request){
         $columns = [
+            1 => "booking_user_id",
+            2 => "event_user_id",
+            3 => "event_id",
+            4 => "no_of_booking",
+            5 => "booking_unit_amount",
+            6 => "applicable_tax_amount",
+            7 => "booking_total_amount",
+            8 => "points_used",
+            9 => "booking_payable_amount",
+            10 => "status",
         ];
 
         $f = EventsOrder::where([]);
@@ -57,8 +69,16 @@ class EventsOrdersController extends Controller
 
             $q = EventsOrder::where(function ($query) use ($search) {
                 return $query
-;
-;
+                      ->orWhere("booking_user_id", "LIKE", "%{$search}%")
+                        ->orWhere("event_user_id", "LIKE", "%{$search}%")
+                        ->orWhere("event_id", "LIKE", "%{$search}%")
+                        ->orWhere("no_of_booking", "LIKE", "%{$search}%")
+                        ->orWhere("booking_unit_amount", "LIKE", "%{$search}%")
+                        ->orWhere("applicable_tax_amount", "LIKE", "%{$search}%")
+                        ->orWhere("booking_total_amount", "LIKE", "%{$search}%")
+                        ->orWhere("points_used", "LIKE", "%{$search}%")
+                        ->orWhere("booking_payable_amount", "LIKE", "%{$search}%")
+                        ->orWhere("status", "LIKE", "%{$search}%");
                 });
 
             $totalFiltered = $q->count();
@@ -77,6 +97,16 @@ class EventsOrdersController extends Controller
             foreach ($lists as $list) {
                 $nestedData["id"] = $list->id;
                 $nestedData["fake_id"] = ++$ids;
+                $nestedData["booking_user_id"] = $list->booking_user_id;
+                $nestedData["event_user_id"] = $list->event_user_id;
+                $nestedData["event_id"] = $list->event_id;
+                $nestedData["no_of_booking"] = $list->no_of_booking;
+                $nestedData["booking_unit_amount"] = $list->booking_unit_amount;
+                $nestedData["applicable_tax_amount"] = $list->applicable_tax_amount;
+                $nestedData["booking_total_amount"] = $list->booking_total_amount;
+                $nestedData["points_used"] = $list->points_used;
+                $nestedData["booking_payable_amount"] = $list->booking_payable_amount;
+                $nestedData["status"] = $list->status;
                 $data[] = $nestedData;
             }
         }
@@ -110,17 +140,85 @@ class EventsOrdersController extends Controller
 
     public function store(Request $request)
     {
+        $eventOrderData = $request->validate([
+            'event_id'=>'required|numeric',
+            'no_of_booking'=>'required|numeric',
+            'points_used'=>'required|numeric',
+        ]);
         // Sanitize input
         $sanitized = $request->all();
-        // $user_id = Auth::user()->id;
 
-        // Store the EventsOrder
-        $eventsOrder = EventsOrder::updateOrCreate([
-            "id" => isset($sanitized['id']) ? $sanitized['id'] : null,
-        ],$sanitized);
+        //validate event available
+        $event = Event::where(['id' => $sanitized['event_id']])
+            ->where(['active' => true])
+            ->first();
+        
+        if($event){
+            if($event->event_remaining_tickets > 0 && $event->event_remaining_tickets >= $sanitized['no_of_booking']){
+                //check available points
+                $user = User::where(['id' => $request->user()->id])->first();
+                if($user){
+                    if($user->available_points >= $sanitized['points_used']){
+                        $sanitized['booking_user_id'] = $request->user()->id;
+                        $sanitized['event_user_id'] = $event->user_id;
+                        $sanitized['booking_unit_amount'] = $event->event_ticket_amount - $event->event_ticket_discount_amount;
+                        $sanitized['applicable_tax_amount'] = env('CUSTOM_SETTING_TAX_TICKETING');
+                        $sanitized['booking_total_amount'] = ($sanitized['booking_unit_amount'] * $sanitized['no_of_booking']) + (($sanitized['booking_unit_amount'] * $sanitized['no_of_booking']) * env('CUSTOM_SETTING_TAX_TICKETING') / 100);
+                        $sanitized['booking_payable_amount'] = $sanitized['booking_total_amount'] - ($sanitized['points_used'] / env('CUSTOM_SETTING_CONVERT_TO_CAD'));
+                        $sanitized['status'] = 'Pending';
 
+                        // Store the EventsOrder
+                        $eventsOrder = EventsOrder::updateOrCreate([
+                            "booking_user_id" => $sanitized['booking_user_id'],
+                            "event_id" => $sanitized['event_id'],
+                            "status" => $sanitized['status']
+                        ],$sanitized);
 
-        return redirect()->route("events-orders.index");
+                        if($request->route()->getPrefix() === 'api'){
+                            return response()->json([
+                                "code" => 200,
+                                "message" => "Successfully added record",
+                            ]);
+                        } else {
+                            return redirect()->route("events-orders.index");
+                        }
+                    } else {
+                        if($request->route()->getPrefix() === 'api'){
+                            return response()->json([
+                                "code" => 501,
+                                "message" => "You do not have sufficient points available",
+                            ]);
+                        } else {
+                            return redirect()->route("events-orders.index");
+                        }
+                    }
+                } else {
+                    if($request->route()->getPrefix() === 'api'){
+                        return response()->json([
+                            "code" => 501,
+                            "message" => "Invalid user",
+                        ]);
+                    } else {
+                        return redirect()->route("events-orders.index");
+                    }
+                }
+            } else {
+                if($request->route()->getPrefix() === 'api'){
+                    return response()->json([
+                        "code" => 501,
+                        "message" => "No tickets available",
+                    ]);
+                } else {
+                    return redirect()->route("events-orders.index");
+                }
+            }
+        } else {
+            return response()->json([
+                "message" => "Invalid event booking",
+                "code" => 501,
+                "data" => [],
+            ]);
+        }
     }
 
     public function show($id)

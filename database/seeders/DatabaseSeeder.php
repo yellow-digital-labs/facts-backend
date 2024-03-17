@@ -12,11 +12,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
+        \App\Models\MUserType::create([
+            'name' => 'User'
+        ]);
+        \App\Models\MUserType::create([
+            'name' => 'Admin'
+        ]);
 
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        \App\Models\MEventsOrdersStatus::create([
+            'events_orders_status_name' => 'Pending'
+        ]);
+        \App\Models\MEventsOrdersStatus::create([
+            'events_orders_status_name' => 'Booked'
+        ]);
+        \App\Models\MEventsOrdersStatus::create([
+            'events_orders_status_name' => 'Scanned'
         ]);
     }
 }

@@ -46,3 +46,13 @@ Route::resource('/events', App\Http\Controllers\Admin\EventsController::class);
 Route::get('/events-orders/list', [App\Http\Controllers\Admin\EventsOrdersController::class,
 'list'])->name('events-orders-list');
 Route::resource('/events-orders', App\Http\Controllers\Admin\EventsOrdersController::class);
+
+/* Auto-generated admin routes */
+Route::get('/m-user-types/list', [App\Http\Controllers\Admin\MUserTypesController::class,
+'list'])->name('m-user-types-list');
+Route::resource('/m-user-types', App\Http\Controllers\Admin\MUserTypesController::class);
+
+/* Auto-generated admin routes */
+Route::get('/m-events-orders-statuses/list', [App\Http\Controllers\Admin\MEventsOrdersStatusController::class,
+'list'])->name('m-events-orders-statuses-list');
+Route::resource('/m-events-orders-statuses', App\Http\Controllers\Admin\MEventsOrdersStatusController::class);

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('event_location');
             $table->string('event_contact', 15);
             $table->integer('event_available_tickets')->default(0);
+            $table->integer('event_remaining_tickets')->default(0);
             $table->integer('event_ticket_amount')->default(0);
             $table->integer('event_ticket_discount_amount')->default(0);
             $table->boolean('active')->default(true);

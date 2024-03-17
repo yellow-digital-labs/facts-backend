@@ -4,19 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EventsOrder extends Model
+class MEventsOrdersStatus extends Model
 {
+    protected $table = 'm_events_orders_status';
+
     protected $fillable = [
-        'booking_user_id',
-        'event_user_id',
-        'event_id',
-        'no_of_booking',
-        'booking_unit_amount',
-        'applicable_tax_amount',
-        'booking_total_amount',
-        'points_used',
-        'booking_payable_amount',
-        'status',
+        'events_orders_status_name',
+        'active',
     
     ];
     
@@ -33,6 +27,6 @@ class EventsOrder extends Model
 
     public function getResourceUrlAttribute()
     {
-        return url('/admin/events-orders/'.$this->getKey());
+        return url('/admin/m-events-orders-statuses/'.$this->getKey());
     }
 }
