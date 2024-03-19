@@ -47,3 +47,5 @@ Route::post('/event/{id}/edit', [App\Http\Controllers\Admin\EventsController::cl
 'store'])->name('event-update')->middleware('auth:sanctum'); //update event
 Route::post('/event/booking/create', [App\Http\Controllers\Admin\EventsOrdersController::class,
 'store'])->name('event-booking-add')->middleware('auth:sanctum'); //add event booking
+Route::post('/event/booking/validate', [App\Http\Controllers\Admin\EventsOrdersController::class,
+'verifyBooking'])->name('event-booking-validate')->middleware('auth:sanctum'); //add event booking

@@ -221,6 +221,45 @@ class EventsOrdersController extends Controller
         }
     }
 
+    public function verifyBooking(Request $request)
+    {
+        $eventOrderData = $request->validate([
+            'event_id'=>'required|numeric',
+            'booking_id'=>'required|numeric',
+            'booking_user_id'=>'required|numeric',
+        ]);
+
+        $sanitized = $request->all();
+
+        $eventOrder = EventsOrder::where([
+            "booking_user_id" => $sanitized['booking_user_id'],
+            "event_id" => $sanitized['event_id'],
+            "id" => $sanitized['booking_id'],
+            "event_user_id" => $request->user()->id,
+            "status" => "Booked",
+        ])->first();
+
+        if($eventOrder){
+            $eventOrder->update([
+                "status" => "Scanned"
+            ]);
+
+            return response()->json([
+                "code" => 200,
+                "message" => "Successfully validated booking",
+                "data" => [
+                    "no_of_booking" => $eventOrder['no_of_booking']
+                ]
+            ]);
+        } else {
+            return response()->json([
+                "message" => "Invalid booking",
+                "code" => 501,
+                "data" => [],
+            ]);
+        }
+    }
+
     public function show($id)
     {
         //
