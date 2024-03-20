@@ -175,8 +175,10 @@ class EventsOrdersController extends Controller
                         ],$sanitized);
 
                         if($request->route()->getPrefix() === 'api'){
+                            $eventData = EventsOrder::where(['id' => $eventsOrder->id])->first();
                             return response()->json([
                                 "code" => 200,
+                                "data" => $eventData,
                                 "message" => "Successfully added record",
                             ]);
                         } else {
