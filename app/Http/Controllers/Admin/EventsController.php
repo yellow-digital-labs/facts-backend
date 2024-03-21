@@ -28,8 +28,41 @@ class EventsController extends Controller
      */
     public function activeList(Request $request){
         try{
-            $lists = Event::where(['active' => true])
-                ->orderBy('event_start_datetime', 'asc')
+            $filterData = $request->validate([
+                'filter_event_categories_id'=>'numeric',
+                'filter_event_name'=>'string',
+                'filter_event_start_datetime'=>'date',
+                'filter_event_end_datetime'=>'date',
+                'filter_event_location'=>'string|max:255',
+                'filter_event_ticket_amount_min'=>'numeric',
+                'filter_event_ticket_amount_max'=>'numeric',
+            ]);
+
+            $sanitized = $request->all();
+
+            $query = Event::where(['active' => true]);
+            if(isset($sanitized['filter_event_categories_id']) && $sanitized['filter_event_categories_id'] != 0){
+                $query->where(['event_categories_id' => $sanitized['filter_event_categories_id']]);
+            }
+            if(isset($sanitized['filter_event_name']) && $sanitized['filter_event_name'] != ''){
+                $query->where('event_name', 'like', '%' . $sanitized['filter_event_name'] . '%');
+            }
+            if(isset($sanitized['filter_event_start_datetime']) && $sanitized['filter_event_start_datetime'] != ''){
+                $query->whereDate(['event_start_datetime' => $sanitized['filter_event_start_datetime']]);
+            }
+            if(isset($sanitized['filter_event_end_datetime']) && $sanitized['filter_event_end_datetime'] != ''){
+                $query->whereDate(['event_end_datetime' => $sanitized['filter_event_end_datetime']]);
+            }
+            if(isset($sanitized['filter_event_location']) && $sanitized['filter_event_location'] != ''){
+                $query->where(['event_location' => $sanitized['filter_event_location']]);
+            }
+            if(isset($sanitized['filter_event_ticket_amount_min']) && $sanitized['filter_event_ticket_amount_min'] != 0){
+                $query->where('event_ticket_amount', '>=',  $sanitized['filter_event_ticket_amount_min']);
+            }
+            if(isset($sanitized['filter_event_ticket_amount_max']) && $sanitized['filter_event_ticket_amount_max'] != 0){
+                $query->where('event_ticket_amount', '<=',  $sanitized['filter_event_ticket_amount_max']);
+            }
+            $lists = $query->orderBy('event_start_datetime', 'asc')
                 ->get();
             $data = [];
             if (!empty($lists)) {
@@ -66,7 +99,9 @@ class EventsController extends Controller
             return response()->json([
                 "message" => "Internal Server Error",
                 "code" => 500,
-                "data" => [],
+                "data" => [
+                    $e->getMessage()
+                ],
             ]);
         }
     }
@@ -256,7 +291,7 @@ class EventsController extends Controller
             'event_end_datetime'=>'required|date',
             'event_end_datetime'=>'required|date',
             'event_description'=>'required|string',
-            // 'event_primary_image'=>'required|file',
+            'event_primary_image'=>'required|string',
             'event_location'=>'required|string|max:255',
             'event_contact'=>'required|numeric|max_digits:15',
             'event_available_tickets'=>'required|numeric',
@@ -269,7 +304,7 @@ class EventsController extends Controller
         // $user_id = Auth::user()->id;
         $sanitized['active'] = isset($sanitized['active']) ? $sanitized['active'] : 0;
         $sanitized['user_id'] = $request->user()->id;
-        $sanitized['event_primary_image'] = 'https://placehold.co/400';
+        // $sanitized['event_primary_image'] = 'https://placehold.co/400';
 
         // Store the Event
         $event = Event::updateOrCreate([

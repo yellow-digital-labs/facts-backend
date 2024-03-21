@@ -19,7 +19,7 @@ return new class extends Migration
             $table->datetime('event_start_datetime');
             $table->datetime('event_end_datetime');
             $table->text('event_description');
-            $table->string('event_primary_image');
+            $table->binary('event_primary_image');
             $table->string('event_location');
             $table->string('event_contact', 15);
             $table->integer('event_available_tickets')->default(0);
