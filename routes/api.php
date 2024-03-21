@@ -35,6 +35,10 @@ Route::get('/events/category/list', [App\Http\Controllers\Admin\MEventCategories
 //Events
 Route::get('/events/list', [App\Http\Controllers\Admin\EventsController::class,
 'activeList'])->name('events-list'); //Events list
+Route::get('/events/location/list', [App\Http\Controllers\Admin\EventsController::class,
+'activeLocationList'])->name('events-list'); //Events location list for filter
+Route::get('/events/price/min-max/list', [App\Http\Controllers\Admin\EventsController::class,
+'activePriceMinMaxList'])->name('events-list'); //Events location list for filter
 Route::get('/events/admin/list', [App\Http\Controllers\Admin\EventsController::class,
 'adminList'])->name('events-admin-list')->middleware('auth:sanctum'); //Admin Events list
 Route::post('/event/create', [App\Http\Controllers\Admin\EventsController::class,

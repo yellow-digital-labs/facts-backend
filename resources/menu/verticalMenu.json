@@ -40,7 +40,14 @@
       "url": "page-2",
       "icon": "menu-icon tf-icons ti ti-file",
       "name": "Tickets",
-      "slug": "setting"
+      "slug": "setting",
+      "submenu": [
+        {
+          "url": "/m-event-categories",
+          "name": "Master Category",
+          "slug": "static-pages-privacy"
+        }
+      ]
     },
     {
       "url": "page-2",

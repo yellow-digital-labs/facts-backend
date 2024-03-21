@@ -31,7 +31,7 @@ class EventsController extends Controller
             $filterData = $request->validate([
                 'filter_event_categories_id'=>'numeric',
                 'filter_event_name'=>'string',
-                'filter_event_start_datetime'=>'date',
+                'filter_event_start_datetime'=>'date|after:yesterday',
                 'filter_event_end_datetime'=>'date',
                 'filter_event_location'=>'string|max:255',
                 'filter_event_ticket_amount_min'=>'numeric',
@@ -39,6 +39,10 @@ class EventsController extends Controller
             ]);
 
             $sanitized = $request->all();
+
+            if(!isset($sanitized['filter_event_start_datetime']) || is_null($sanitized['filter_event_start_datetime'])){
+                $sanitized['filter_event_start_datetime'] = date('Y-m-d');
+            }
 
             $query = Event::where(['active' => true]);
             if(isset($sanitized['filter_event_categories_id']) && $sanitized['filter_event_categories_id'] != 0){
@@ -48,10 +52,10 @@ class EventsController extends Controller
                 $query->where('event_name', 'like', '%' . $sanitized['filter_event_name'] . '%');
             }
             if(isset($sanitized['filter_event_start_datetime']) && $sanitized['filter_event_start_datetime'] != ''){
-                $query->whereDate(['event_start_datetime' => $sanitized['filter_event_start_datetime']]);
+                $query->whereDate('event_start_datetime', '>=', $sanitized['filter_event_start_datetime']);
             }
             if(isset($sanitized['filter_event_end_datetime']) && $sanitized['filter_event_end_datetime'] != ''){
-                $query->whereDate(['event_end_datetime' => $sanitized['filter_event_end_datetime']]);
+                $query->whereDate('event_end_datetime', '<=', $sanitized['filter_event_end_datetime']);
             }
             if(isset($sanitized['filter_event_location']) && $sanitized['filter_event_location'] != ''){
                 $query->where(['event_location' => $sanitized['filter_event_location']]);
@@ -104,6 +108,54 @@ class EventsController extends Controller
                 ],
             ]);
         }
+    }
+
+    /**
+     * Active Event Locations List.
+     * 
+     * Get all active events locations list for filter popup dropdown.
+     */
+    public function activeLocationList(Request $request){
+        try{
+            $locationData = Event::select('event_location')
+                ->where(['active' => true])
+                ->orderBy('event_location', 'asc')
+                ->groupBy('event_location')
+                ->get();
+
+            $data = [];
+            if (!empty($locationData)) {
+                foreach ($locationData as $list) {
+                    $nestedData["event_location"] = $list->event_location;
+                    $data[] = $nestedData;
+                }
+            }
+
+            if ($data) {
+                return response()->json([
+                    "code" => 200,
+                    "data" => $data,
+                ]);
+            } else {
+                return response()->json([
+                    "message" => "No data found",
+                    "code" => 501,
+                    "data" => [],
+                ]);
+            }
+        } catch(Exception $e){
+            return response()->json([
+                "message" => "Internal Server Error",
+                "code" => 500,
+                "data" => [
+                    $e->getMessage()
+                ],
+            ]);
+        }
+    }
+
+    public function activePriceMinMaxList(Request $request){
+
     }
 
     /**
