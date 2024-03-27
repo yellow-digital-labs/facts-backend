@@ -238,7 +238,7 @@ class EventsOrdersController extends Controller
             "event_id" => $sanitized['event_id'],
             "id" => $sanitized['booking_id'],
             "event_user_id" => $request->user()->id,
-            "status" => "Booked",
+            "status" => "Pending",
         ])->first();
 
         if($eventOrder){
