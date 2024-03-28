@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/events/category/list', [App\Http\Controllers\Admin\MEventCategoriesController::class,
 'activeList']);
 //Events
-Route::get('/events/list', [App\Http\Controllers\Admin\EventsController::class,
+Route::post('/events/list', [App\Http\Controllers\Admin\EventsController::class,
 'activeList'])->name('events-list'); //Events list
 Route::get('/events/location/list', [App\Http\Controllers\Admin\EventsController::class,
 'activeLocationList'])->name('events-list'); //Events location list for filter
